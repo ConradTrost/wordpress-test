@@ -1,13 +1,10 @@
 <?php
-/**
- * The template for displaying Resource posts
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
- *
- * @package WordPress
- * @subpackage Twenty_Twenty_One
- * @since 1.0.0
- */
+/*
+Template Name: Resources
+*/
+?>
+
+<?php
 
 get_header();
 
@@ -16,7 +13,78 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	get_template_part( 'template-parts/content/content-single' );
+?>
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+	<header class="entry-header alignwide">
+		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		<?php twenty_twenty_one_post_thumbnail(); ?>
+
+<h3 class="class-date">Posted: <?php echo the_date(); ?></h3>
+		<h3 class="class-taxonomies" >Topics:</h3>
+		<ul>
+		<?php 
+	$custom_taxonomy = get_the_terms(0, 'topic');
+if ($custom_taxonomy) {
+    foreach ($custom_taxonomy as $custom_tax) {
+        echo "<li>$custom_tax->name</li>";
+    }
+} ?>
+</ul>
+
+		<h3 class="class-audiences" >Audiences:</h3>
+		<ul>
+		<?php 
+	$custom_taxonomy = get_the_terms(0, 'audience');
+if ($custom_taxonomy) {
+    foreach ($custom_taxonomy as $custom_tax) {
+        echo "<li>$custom_tax->name</li>";
+    }
+} ?>
+</ul>
+<?php 
+
+$url = $_SERVER['REQUEST_URI'];
+echo "<a href=$url download>Download</a><br>";
+
+$explode_url = explode('/', $url);
+array_pop($explode_url);
+array_pop($explode_url);
+$backLink = implode('/', $explode_url);
+echo "<a href=$backLink>Back</a>"
+
+
+?>
+
+	</header>
+
+	<div class="entry-content">
+		<?php
+		the_content();
+
+		wp_link_pages(
+			array(
+				'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
+				'after'    => '</nav>',
+				/* translators: %: page number. */
+				'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
+			)
+		);
+		?>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer default-max-width">
+		<?php twenty_twenty_one_entry_meta_footer(); ?>
+	</footer><!-- .entry-footer -->
+
+	<?php if ( ! is_singular( 'attachment' ) ) : ?>
+		<?php get_template_part( 'template-parts/post/author-bio' ); ?>
+	<?php endif; ?>
+
+</article><!-- #post-${ID} -->
+
+
+<?php
 
 	if ( is_attachment() ) {
 		// Parent post navigation.
@@ -26,11 +94,6 @@ while ( have_posts() ) :
 				'prev_text' => sprintf( __( '<span class="meta-nav">Published in</span><span class="post-title">%s</span>', 'twentytwentyone' ), '%title' ),
 			)
 		);
-	}
-
-	// If comments are open or there is at least one comment, load up the comment template.
-	if ( comments_open() || get_comments_number() ) {
-		comments_template();
 	}
 
 	// Previous/next post navigation.
@@ -59,6 +122,7 @@ while ( have_posts() ) :
 			'prev_text' => '<p class="meta-nav">' . $twentytwentyone_prev . $twentytwentyone_previous_label . '</p><p class="post-title">%title</p>',
 		)
 	);
+	
 endwhile; // End of the loop.
 
 get_footer();
