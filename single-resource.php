@@ -42,10 +42,15 @@ if ($custom_taxonomy) {
     }
 } ?>
 </ul>
+
+<a href="<?php get_post_meta(get_the_ID(), 'download', TRUE) ?>" download>download link from custom field</a><br>
+
 <?php 
 
+$docURL = 
+
 $url = $_SERVER['REQUEST_URI'];
-echo "<a href=$url download>Download</a><br>";
+echo "<a href=$url download>Download link from _SERVER['REQUEST_URI']</a><br>";
 
 $explode_url = explode('/', $url);
 array_pop($explode_url);

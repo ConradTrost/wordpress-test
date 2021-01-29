@@ -608,3 +608,109 @@ function twentytwentyone_add_ie_class() {
 	<?php
 }
 add_action( 'wp_footer', 'twentytwentyone_add_ie_class' );
+
+
+function cptui_register_my_cpts_resource() {
+
+	/**
+	 * Post Type: Resource.
+	 */
+
+	$labels = [
+		"name" => __( "Resource", "twentytwentyone" ),
+		"singular_name" => __( "Resource", "twentytwentyone" ),
+	];
+
+
+	$args = [
+		"label" => __( "Resource", "twentytwentyone" ),
+		"labels" => $labels,
+		"description" => "",
+		"public" => true,
+		"publicly_queryable" => true,
+		"show_ui" => true,
+		"show_in_rest" => true,
+		"rest_base" => "",
+		"rest_controller_class" => "WP_REST_Posts_Controller",
+		"has_archive" => "resource",
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"delete_with_user" => false,
+		"exclude_from_search" => false,
+		"capability_type" => "post",
+		"map_meta_cap" => true,
+		"hierarchical" => false,
+		"rewrite" => [ "slug" => "resource", "with_front" => true ],
+		"query_var" => true,
+		"supports" => [ "title", "editor", "thumbnail" , "custom-fields"],
+		"taxonomies" => [ "topic", "audience" ],
+	];
+
+	register_post_type( "resource", $args );
+}
+
+add_action( 'init', 'cptui_register_my_cpts_resource' );
+
+function cptui_register_my_taxes_topic() {
+
+	/**
+	 * Taxonomy: Topics.
+	 */
+
+	$labels = [
+		"name" => __( "Topics", "twentytwentyone" ),
+		"singular_name" => __( "Topic", "twentytwentyone" ),
+	];
+
+	$args = [
+		"label" => __( "Topics", "twentytwentyone" ),
+		"labels" => $labels,
+		"public" => true,
+		"publicly_queryable" => true,
+		"hierarchical" => false,
+		"show_ui" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"query_var" => true,
+		"rewrite" => [ 'slug' => 'topic', 'with_front' => true, ],
+		"show_admin_column" => false,
+		"show_in_rest" => true,
+		"rest_base" => "topic",
+		"rest_controller_class" => "WP_REST_Terms_Controller",
+		"show_in_quick_edit" => false,
+			];
+	register_taxonomy( "topic", [ "resource" ], $args );
+}
+add_action( 'init', 'cptui_register_my_taxes_topic' );
+
+function cptui_register_my_taxes_audience() {
+
+	/**
+	 * Taxonomy: Audience.
+	 */
+
+	$labels = [
+		"name" => __( "Audience", "twentytwentyone" ),
+		"singular_name" => __( "Audience", "twentytwentyone" ),
+	];
+
+	$args = [
+		"label" => __( "Audience", "twentytwentyone" ),
+		"labels" => $labels,
+		"public" => true,
+		"publicly_queryable" => true,
+		"hierarchical" => false,
+		"show_ui" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"query_var" => true,
+		"rewrite" => [ 'slug' => 'audience', 'with_front' => true, ],
+		"show_admin_column" => false,
+		"show_in_rest" => true,
+		"rest_base" => "audience",
+		"rest_controller_class" => "WP_REST_Terms_Controller",
+		"show_in_quick_edit" => false,
+			];
+	register_taxonomy( "audience", [ "resource" ], $args );
+}
+add_action( 'init', 'cptui_register_my_taxes_audience' );
